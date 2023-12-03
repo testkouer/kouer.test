@@ -2,6 +2,7 @@ import styles from './page.module.css'
 import React from 'react';
 import { any, string, z } from 'zod'
 import { createClient} from '@supabase/supabase-js';
+const sanitizer = require('sanitize')();
 
 const MAX_FILE_SIZE = 5000000;
 const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
@@ -28,14 +29,14 @@ export default function Home() {
 		'use server'
 
 		const parsed = schema.parse({
-			first_name: formData.get('first_name'),
-			last_name: formData.get('last_name'),
-			email: formData.get('email'),
-			phone: formData.get('phone'),
-			profile_img: formData.get('profile_img'),
-			address: formData.get('address'),
-			zip_code: formData.get('zip_code'),
-			country: formData.get('country')
+			first_name: sanitizer.value(formData.get('first_name')),
+			last_name: sanitizer.value(formData.get('last_name')),
+			email: sanitizer.value(formData.get('email')),
+			phone: sanitizer.value(formData.get('phone')),
+			profile_img: sanitizer.value(formData.get('profile_img')),
+			address: sanitizer.value(formData.get('address')),
+			zip_code: sanitizer.value(formData.get('zip_code')),
+			country: sanitizer.value(formData.get('country'))
 		});
 		console.log(parsed);
 		const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
@@ -59,23 +60,39 @@ export default function Home() {
 	return (
     <main className={styles.main}>
       <form action={submit} className={styles.form}>
-		<label>Prenom</label>
-		<input required type="text" name="first_name"></input>
-		<label>Nom</label>
-		<input required type="text" name="last_name"></input>
-		<label>Email</label>
-		<input required type="email" name="email"></input>
-		<label>Phone number</label>
-		<input required type="tel" name="phone"></input>
-		<label>Profile Image</label>
-		<input required type="file" accept='image/*' name="profile_img"></input>
-		<label>Address</label>
-		<input required type="text" name="address"></input>
-		<label>Zip Code</label>
-		<input required type="text" name="zip_code"></input>
-		<label>Country</label>
-		<input required type="text" name="country"></input>
-		<input type="submit"></input>
+		<div className={styles.input_pair} id={styles.first_name}>
+			<label>Prenom</label>
+			<input required type="text" name="first_name"></input>
+		</div>
+		<div className={styles.input_pair} id={styles.last_name}>
+			<label>Nom</label>
+			<input required type="text" name="last_name"></input>
+		</div>
+		<div className={styles.input_pair} id={styles.email}>
+			<label>Email</label>
+			<input required type="email" name="email"></input>
+		</div>
+		<div className={styles.input_pair} id={styles.phone}>
+			<label>Telephone</label>
+			<input required type="tel" name="phone"></input>
+		</div>
+		<div className={styles.input_pair} id={styles.country}>
+			<label>Ville</label>
+			<input required type="text" name="country"></input>
+		</div>
+		<div className={styles.input_pair} id={styles.address}>
+			<label>Addresse</label>
+			<input required type="text" name="address"></input>
+		</div>
+		<div className={styles.input_pair} id={styles.zip}>
+			<label>ZIP</label>
+			<input required type="text" name="zip_code"></input>
+		</div>
+		<div className={styles.input_pair} id={styles.profile_img}>
+			<label>Image de profile</label>
+			<input required type="file" accept='image/*' name="profile_img"></input>
+		</div>
+		<input type="submit" id={styles.submit}></input>
 	  </form>
     </main>
   )

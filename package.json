@@ -13,6 +13,7 @@
     "next": "14.0.3",
     "react": "^18",
     "react-dom": "^18",
+    "sanitize": "^2.1.2",
     "supabase": "^1.115.4",
     "validator": "^13.11.0",
     "zod": "^3.22.4"
